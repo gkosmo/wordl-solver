@@ -20,7 +20,7 @@ Juwelier::Tasks.new do |gem|
   gem.description = "This gem helps you solve wordl puzzles. It does so by asking you for the letters position you know, the letters you know exists and the ones you know don't exists. It then proposes words depending on how good they are by weighting the letters by their frequency in the english language."
   gem.email = "gkosmo1@hotmail.com"
   gem.authors = ["george kosmopoulos"]
-  gem.files.include "lib/**/*"
+  gem.files.include "lib/*"
   # dependencies defined in Gemfile
   gem.executables = ['wordl-solver']
 end
