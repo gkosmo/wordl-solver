@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
     "VERSION",
     "bin/wordl-solver",
     "lib/5_words.csv",
-    "lib/wordl-solver.rb"
+    "lib/wordl-solver.rb",
+    "wordl-solver.gemspec"
   ]
   s.homepage = "http://github.com/gkosmo/wordl-solver".freeze
   s.licenses = ["MIT".freeze]
