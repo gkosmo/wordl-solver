@@ -60,11 +60,13 @@ GEM
       rdoc
       semver
     jwt (2.3.0)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    nokogiri (1.13.3-x86_64-linux)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     oauth2 (1.4.9)
       faraday (>= 0.17.3, < 3.0)
@@ -98,14 +100,14 @@ GEM
       concurrent-ruby (~> 1.0)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
-  bundler
+  bundler (~> 1.0)
   juwelier (~> 2.1.0)
   rdoc (~> 3.12)
   shoulda
   simplecov
 
 BUNDLED WITH
-   2.2.22
+   1.17.3
