@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/gkosmo/wordl-solver".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "3.2.22".freeze
+  s.rubygems_version = "3.3.10".freeze
   s.summary = "This gem solves wordl puzzles.".freeze
 
   if s.respond_to? :specification_version then
