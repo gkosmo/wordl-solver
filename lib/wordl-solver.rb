@@ -1,7 +1,8 @@
 require "csv"
 require "fileutils"
 
-FILE_PATH = "5_words.csv"
+FILE_PATH = File.join( File.dirname(__FILE__), '5_words.csv')
+
 LETTER_WORDS = []
 LETTER_FRENQUENCY = %w(e t a o i n s h r d l c u m f w y g p b v k j x q z)
 INITIAL_POSITIONED_LETTER_MESSAGE = "enter in order the letters for which you know the position \n if you don't know the position press enter"
