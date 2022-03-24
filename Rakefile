@@ -16,12 +16,13 @@ Juwelier::Tasks.new do |gem|
   gem.name = "wordl-solver"
   gem.homepage = "http://github.com/gkosmo/wordl-solver"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "This gem solves wordl puzzles."
+  gem.description = "This gem helps you solve wordl puzzles. It does so by asking you for the letters position you know, the letters you know exists and the ones you know don't exists. It then proposes words depending on how good they are by weighting the letters by their frequency in the english language."
   gem.email = "gkosmo1@hotmail.com"
   gem.authors = ["george kosmopoulos"]
 
   # dependencies defined in Gemfile
+  gem.executables = ['wordl-solver']
 end
 Juwelier::RubygemsDotOrgTasks.new
 require 'rake/testtask'
