@@ -1,4 +1,5 @@
 require "csv"
+require "fileutils"
 
 FILE_PATH = "./lib/5_words.csv"
 LETTER_WORDS = []
