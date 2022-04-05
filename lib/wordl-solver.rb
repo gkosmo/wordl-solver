@@ -5,63 +5,94 @@ FILE_PATH = File.join( File.dirname(__FILE__), '5_words.csv')
 
 LETTER_WORDS = []
 LETTER_FRENQUENCY = %w(e t a o i n s h r d l c u m f w y g p b v k j x q z)
-INITIAL_POSITIONED_LETTER_MESSAGE = "enter in order the letters for which you know the position \n if you don't know the position press enter"
-INITIAL_EXISTING_LETTER_MESSAGE = "enter all the letters you know exist in the word but for which you don't know the position"
-INITIAL_NOT_EXISTING_MESSAGE = "enter all the letters you know DO NOT exist in the word"
-POSITIONED_LETTER_MESSAGE = "enter all the letters in their position \n if you don't know the position press enter"
-EXISTING_LETTER_MESSAGE = "add the letters you know exist in the word but for which you don't know the position"
-NOT_EXISTING_MESSAGE = "enter all the letters you know DO NOT exist in the word"
 
 CSV.foreach(FILE_PATH) do |row|
   LETTER_WORDS << row[0]
 end
+
 class WordlSolver
+  
+  def initialize
+    @yellows = {
+      0 => [],
+      1 => [],
+      2 => [],
+      3 => [],
+      4 => []
+    }
+    @greys = []
+    @greens = {
+      0 => nil,
+      1 => nil,
+      2 => nil,
+      3 => nil,
+      4 => nil
+    }
+  end
 
   def self.run
     WordlSolver.new.run
   end
 
   def run
-    existing_letters, not_existing_letters, posish = initial_run
-    iterating_run(existing_letters, not_existing_letters, posish)
+    answer = ""
+    while answer != "y"
+      ask_for_letters_and_colours
+      find_possible_words
+      puts "have you found it ? (y/n)"
+      answer = gets.chomp
+    end
   end
 
-  private 
+  private
 
-  def ask_and_list_words(positioned_letter_message, existing_letter_message, not_existing_message, existing_letters, not_existing_letters, posish)
-    puts positioned_letter_message
-    
-    posish.each do |position, value|
-      if value.nil? || value == ""
-        puts "for position #{position + 1} enter a letter"
-        posish[position] = gets.chomp
+  def ask_for_letters_and_colours
+    puts "Type in order color initial then the letter"
+    puts "(s for silver, y for yellow and g for green)"
+    5.times do |t|
+      puts @greens[t]
+      if @greens[t].nil?
+        puts "for position #{t + 1}"
+        letters = gets.chomp
+        while check_word_correct(letters)
+          puts "sorry, didn't catch that, try again:"
+          letters = gets.chomp
+        end
+        if letters[0] == 's'
+          @greys << letters[1]
+        elsif letters[0] == 'y'
+          @yellows[t] << letters[1]
+        else
+          @greens[t] = letters[1]
+        end
       else
-        puts "for position #{position + 1} you've found: #{value}"
+        puts "for position #{t + 1} this #{@greens[t]}"
       end
     end
-    puts existing_letters
-    puts existing_letter_message
-    exist = existing_letters | gets.chomp.split('')
-    puts not_existing_message
-    puts not_existing_letters
-    not_exist = not_existing_letters | gets.chomp.split('')
+    return [@greens, @yellows, @greys]
+  end
+
+  def find_possible_words
     possible_words = []
     LETTER_WORDS.each do |word|
       put_in = true 
-      posish.each do |key, value|
-        next if value == ""
+      @greens.each do |key, value|
+        next if value == nil
         put_in = false unless word[key] == value
       end
       possible_words << word if put_in
     end
-    possible_words = possible_words.select do |word|
-      exist.all? { |letter| word.include?(letter) }
+    possible_words.select do |word|
+      possible = true
+      word.chars.each_with_index do |letter, index|
+        possible = false if @yellows[index].include?(letter)
+      end
+      possible
     end
-
     possible_words = possible_words.select do |word|
-      !not_exist.any? { |letter|  word.include?(letter) }
+      !@greys.any? { |letter| word.include?(letter) }
     end
-    "here are the existing words"
+    puts "here are the existing words"
     hash_word_frequency = Hash.new()
     possible_words.each do |word| 
       count = 0
@@ -72,41 +103,11 @@ class WordlSolver
     end
     hash_word_frequency = hash_word_frequency.sort_by { |k, v| v }
     hash_word_frequency.first(30).each do |word, count|
-      puts "#{word} : #{count}"
+      p "#{word} : #{count}"
     end
-    return [exist, not_exist, posish]
   end
 
-  def initial_run
-    existing_letters = []
-    not_existing_letters = []
-    posish = {
-      0 => nil,
-      1 => nil,
-      2 => nil,
-      3 => nil,
-      4 => nil,
-    }
-    history = ask_and_list_words(INITIAL_POSITIONED_LETTER_MESSAGE, INITIAL_EXISTING_LETTER_MESSAGE, INITIAL_NOT_EXISTING_MESSAGE, existing_letters, not_existing_letters, posish)
-    puts "have you found it ? (y/n)"
-    answer = gets.chomp
-    existing_letters = history[0]
-    not_existing_letters = history[1]
-    puts "existing letters"
-    puts existing_letters.join(" - ")
-    puts "not existing letters"
-    puts not_existing_letters.join(" - ")
-    return [existing_letters, not_existing_letters, posish]
-  end
-
-
-  def iterating_run(existing_letters, not_existing_letters, posish)
-    answer = nil
-    until answer == 'y'
-      existing_letters, not_existing_letters, posish = ask_and_list_words(POSITIONED_LETTER_MESSAGE, EXISTING_LETTER_MESSAGE, NOT_EXISTING_MESSAGE, existing_letters, not_existing_letters, posish)
-      puts "have you found it ? (y/n)"
-      answer = gets.chomp
-    end
-    puts 'you found it!'
+  def check_word_correct(letters)
+    letters.length != 2 || !%w[s y g].include?(letters[0])
   end
 end
