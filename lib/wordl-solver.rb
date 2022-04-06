@@ -11,7 +11,7 @@ CSV.foreach(FILE_PATH) do |row|
 end
 
 class WordlSolver
-  
+
   def initialize
     @yellows = {
       0 => [],
@@ -28,6 +28,7 @@ class WordlSolver
       3 => nil,
       4 => nil
     }
+    @possible_words = []
   end
 
   def self.run
@@ -39,6 +40,7 @@ class WordlSolver
     while answer != "y"
       ask_for_letters_and_colours
       find_possible_words
+      present_possible_words
       puts "have you found it ? (y/n)"
       answer = gets.chomp
     end
@@ -73,28 +75,15 @@ class WordlSolver
   end
 
   def find_possible_words
-    possible_words = []
-    LETTER_WORDS.each do |word|
-      put_in = true 
-      @greens.each do |key, value|
-        next if value == nil
-        put_in = false unless word[key] == value
-      end
-      possible_words << word if put_in
-    end
-    possible_words.select do |word|
-      possible = true
-      word.chars.each_with_index do |letter, index|
-        possible = false if @yellows[index].include?(letter)
-      end
-      possible
-    end
-    possible_words = possible_words.select do |word|
-      !@greys.any? { |letter| word.include?(letter) }
-    end
+    filter_greens
+    filter_yellows
+    filter_greys
+  end
+
+  def present_possible_words
     puts "here are the existing words"
     hash_word_frequency = Hash.new()
-    possible_words.each do |word| 
+    @possible_words.each do |word|
       count = 0
       word.chars.each do |char|
         count += LETTER_FRENQUENCY.index(char) + 2 * word.chars.count(char)
@@ -104,6 +93,34 @@ class WordlSolver
     hash_word_frequency = hash_word_frequency.sort_by { |k, v| v }
     hash_word_frequency.first(30).each do |word, count|
       p "#{word} : #{count}"
+    end
+  end
+
+  def filter_greens
+    @possible_words = (@possible_words.empty? ? LETTER_WORDS : @possible_words).select do |word|
+      put_in = true
+      @greens.each do |key, value|
+        next if value.nil?
+
+        put_in = false unless word[key] == value
+      end
+      put_in
+    end
+  end
+
+  def filter_yellows
+    @possible_words.select! do |word|
+      possible = true
+      word.chars.each_with_index do |letter, index|
+        possible = false if @yellows[index].include?(letter)
+      end
+      possible
+    end
+  end
+
+  def filter_greys
+    @possible_words.select! do |word|
+      !@greys.any? { |letter| word.include?(letter) }
     end
   end
 
