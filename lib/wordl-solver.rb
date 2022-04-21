@@ -1,17 +1,16 @@
-require "csv"
-require "fileutils"
+require 'csv'
+require 'fileutils'
 
-FILE_PATH = File.join( File.dirname(__FILE__), '5_words.csv')
+FILE_PATH = File.join(File.dirname(__FILE__), '5_words.csv')
 
 LETTER_WORDS = []
-LETTER_FRENQUENCY = %w(e t a o i n s h r d l c u m f w y g p b v k j x q z)
+LETTER_FRENQUENCY = %w[e t a o i n s h r d l c u m f w y g p b v k j x q z].freeze
 
 CSV.foreach(FILE_PATH) do |row|
   LETTER_WORDS << row[0]
 end
 
 class WordlSolver
-
   def initialize
     @yellows = {
       0 => [],
@@ -36,12 +35,12 @@ class WordlSolver
   end
 
   def run
-    answer = ""
-    while answer != "y"
+    answer = ''
+    while answer != 'y'
       ask_for_letters_and_colours
       find_possible_words
       present_possible_words
-      puts "have you found it ? (y/n)"
+      puts 'have you found it ? (y/n)'
       answer = gets.chomp
     end
   end
@@ -49,8 +48,8 @@ class WordlSolver
   private
 
   def ask_for_letters_and_colours
-    puts "Type in order color initial then the letter"
-    puts "(s for silver, y for yellow and g for green)"
+    puts 'Type in order color initial then the letter'
+    puts '(s for silver, y for yellow and g for green)'
     5.times do |t|
       puts @greens[t]
       if @greens[t].nil?
@@ -71,7 +70,7 @@ class WordlSolver
         puts "for position #{t + 1} this #{@greens[t]}"
       end
     end
-    return [@greens, @yellows, @greys]
+    [@greens, @yellows, @greys]
   end
 
   def find_possible_words
@@ -81,8 +80,8 @@ class WordlSolver
   end
 
   def present_possible_words
-    puts "here are the existing words"
-    hash_word_frequency = Hash.new()
+    puts 'here are the existing words'
+    hash_word_frequency = {}
     @possible_words.each do |word|
       count = 0
       word.chars.each do |char|
@@ -90,7 +89,7 @@ class WordlSolver
       end
       hash_word_frequency[word] = count
     end
-    hash_word_frequency = hash_word_frequency.sort_by { |k, v| v }
+    hash_word_frequency = hash_word_frequency.sort_by { |_k, v| v }
     hash_word_frequency.first(30).each do |word, count|
       p "#{word} : #{count}"
     end
@@ -119,8 +118,8 @@ class WordlSolver
   end
 
   def filter_greys
-    @possible_words.select! do |word|
-      !@greys.any? { |letter| word.include?(letter) }
+    @possible_words.reject! do |word|
+      @greys.any? { |letter| word.include?(letter) }
     end
   end
 
