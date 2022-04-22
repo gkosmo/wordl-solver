@@ -108,11 +108,13 @@ class WordlSolver
   end
 
   def filter_yellows
+    yellow_letters = @yellows.values.flatten.uniq
     @possible_words.select! do |word|
       possible = true
       word.chars.each_with_index do |letter, index|
         possible = false if @yellows[index].include?(letter)
       end
+      possible = false unless yellow_letters.all? { |letter| word.include?(letter) }
       possible
     end
   end
