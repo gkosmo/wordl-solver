@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'fileutils'
 
 FILE_PATH = File.join(File.dirname(__FILE__), '5_words.csv')
 
-LETTER_WORDS = []
-LETTER_FRENQUENCY = %w[e t a o i n s h r d l c u m f w y g p b v k j x q z].freeze
+LETTER_WORDS = [].freeze
+LETTER_FRENQUENCY = %w[e t a o i n s h r d l c u m f w y g p b v k j x q z].reverse.freeze
 
 CSV.foreach(FILE_PATH) do |row|
   LETTER_WORDS << row[0]
@@ -59,18 +61,22 @@ class WordlSolver
           puts "sorry, didn't catch that, try again:"
           letters = gets.chomp
         end
-        if letters[0] == 's'
-          @greys << letters[1]
-        elsif letters[0] == 'y'
-          @yellows[t] << letters[1]
-        else
-          @greens[t] = letters[1]
-        end
+        sort_letter_upon_color(letters, t)
       else
         puts "for position #{t + 1} this #{@greens[t]}"
       end
     end
-    [@greens, @yellows, @greys]
+  end
+
+  def sort_letter_upon_color(letters, t)
+    case letters[0]
+    when 's'
+      @greys << letters[1]
+    when 'y'
+      @yellows[t] << letters[1]
+    else
+      @greens[t] = letters[1]
+    end
   end
 
   def find_possible_words
@@ -84,13 +90,13 @@ class WordlSolver
     hash_word_frequency = {}
     @possible_words.each do |word|
       count = 0
-      word.chars.each do |char|
-        count += LETTER_FRENQUENCY.index(char) + 2 * word.chars.count(char)
+      word.chars.uniq.each do |char|
+        count += LETTER_FRENQUENCY.index(char)
       end
       hash_word_frequency[word] = count
     end
     hash_word_frequency = hash_word_frequency.sort_by { |_k, v| v }
-    hash_word_frequency.first(30).each do |word, count|
+    hash_word_frequency.last(30).each do |word, count|
       p "#{word} : #{count}"
     end
   end
