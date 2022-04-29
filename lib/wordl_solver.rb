@@ -5,7 +5,7 @@ require 'fileutils'
 
 FILE_PATH = File.join(File.dirname(__FILE__), '5_words.csv')
 
-LETTER_WORDS = [].freeze
+LETTER_WORDS = []
 LETTER_FRENQUENCY = %w[e t a o i n s h r d l c u m f w y g p b v k j x q z].reverse.freeze
 
 CSV.foreach(FILE_PATH) do |row|
