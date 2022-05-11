@@ -80,6 +80,7 @@ class WordlSolver
   end
 
   def find_possible_words
+    @possible_words = @possible_words.empty? ? LETTER_WORDS : @possible_words
     filter_greens
     filter_yellows
     filter_greys
@@ -102,7 +103,7 @@ class WordlSolver
   end
 
   def filter_greens
-    @possible_words = (@possible_words.empty? ? LETTER_WORDS : @possible_words).select do |word|
+    @possible_words.select! do |word|
       put_in = true
       @greens.each do |key, value|
         next if value.nil?
