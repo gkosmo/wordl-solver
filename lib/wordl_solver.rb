@@ -6,7 +6,6 @@ require 'fileutils'
 FILE_PATH = File.join(File.dirname(__FILE__), '5_words.csv')
 
 LETTER_WORDS = []
-LETTER_FRENQUENCY = %w[e t a o i n s h r d l c u m f w y g p b v k j x q z].reverse.freeze
 
 CSV.foreach(FILE_PATH) do |row|
   LETTER_WORDS << row[0]
@@ -89,10 +88,11 @@ class WordlSolver
   def present_possible_words
     puts 'here are the existing words'
     hash_word_frequency = {}
+    set_letters_frequencies
     @possible_words.each do |word|
       count = 0
       word.chars.uniq.each do |char|
-        count += LETTER_FRENQUENCY.index(char)
+        count += @frenquencies[char]
       end
       hash_word_frequency[word] = count
     end
@@ -134,5 +134,15 @@ class WordlSolver
 
   def check_word_correct(letters)
     letters.length != 2 || !%w[s y g].include?(letters[0])
+  end
+
+  def set_letters_frequencies
+    @frenquencies = {}
+    @possible_words.each do |word|
+      word.chars.each do |letter|
+        @frenquencies[letter] = 0 if @frenquencies[letter].nil?
+        @frenquencies[letter] += 1
+      end
+    end
   end
 end
