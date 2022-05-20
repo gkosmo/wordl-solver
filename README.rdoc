@@ -2,6 +2,16 @@
 
 Description goes here.
 
+This is a tool I've built to help me solve wordle. 
+It does so by providing all the 5 letter words, ordering them by the frequency of the letters and filter them depending on the the colours. 
+ 
+
+** Still To DO
+
+- have the logic for when a letter appear twice or not
+- allow to correct the inputs
+- clean the code a bit more 
+
 == Contributing to wordl-solver
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.

@@ -76,6 +76,7 @@ class WordlSolver
     else
       @greens[t] = letters[1]
     end
+    @greys.filter! { |letter| @greens.include?(letter) }
   end
 
   def find_possible_words
@@ -97,7 +98,7 @@ class WordlSolver
       hash_word_frequency[word] = count
     end
     hash_word_frequency = hash_word_frequency.sort_by { |_k, v| v }
-    hash_word_frequency.last(30).each do |word, count|
+    hash_word_frequency.each do |word, count|
       p "#{word} : #{count}"
     end
   end
