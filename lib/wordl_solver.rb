@@ -76,7 +76,7 @@ class WordlSolver
     else
       @greens[t] = letters[1]
     end
-    @greys.filter! { |letter| @greens.include?(letter) }
+    @greys.filter! { |letter| @greens.include?(letter) || @yellows.values.flatten.include?(letter) }
   end
 
   def find_possible_words
