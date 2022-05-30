@@ -16,7 +16,7 @@ class WordlSolver
     @greys = greys
     @greens = greens 
     @yellows = yellows
-    @possible_words = @possible_words.nil? || @possible_words.empty ? LETTER_WORDS : @possible_words
+    @possible_words = @possible_words.nil? || @possible_words.empty? ? LETTER_WORDS : @possible_words
     filter_greens
     filter_yellows
     filter_greys
