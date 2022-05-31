@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'wordl_solver'
-WordlSolver.run
+require 'wordl_solver_interface'
+WordlSolverInterface.run
