@@ -53,18 +53,14 @@ class WordlSolverInterface
     puts "and then the letter that was tried."
     puts "For example, if you have tried and arose and you get grey for a"
     puts "You'd type, after being prompted for the first position: sa "
-    5.times do |t|
-      puts @greens[t]
-      if @greens[t].nil?
-        puts "for position #{t + 1}"
-        letters = gets.chomp
-        while check_word_correct(letters)
-          puts "sorry, didn't catch that, try again:"
-          letters = gets.chomp
-        end
-        sort_letter_upon_color(letters, t)
+    5.times do |position|
+      puts @greens[position]
+      if @greens[position].nil?
+        puts "for position #{position + 1}"
+        letters = retrieve_input_letters
+        sort_letter_upon_color(letters, position)
       else
-        puts "for position #{t + 1} this #{@greens[t]}"
+        puts "for position #{position + 1} this #{@greens[position]}"
       end
     end
   end
@@ -86,17 +82,25 @@ class WordlSolverInterface
     end
   end
 
-  def check_word_correct(letters)
-    letters.length != 2 || !%w[s y g].include?(letters[0])
+  def word_is_correct?(letters)
+    letters.length == 2 && %w[s y g].include?(letters[0])
   end
 
   def set_letters_frequencies
-    @frenquencies = {}
+    @frenquencies = Hash.new(0)
     @possible_words.each do |word|
       word.chars.each do |letter|
-        @frenquencies[letter] = 0 if @frenquencies[letter].nil?
         @frenquencies[letter] += 1
       end
     end
+  end
+
+  def retrieve_input_letters
+    letters = gets.chomp
+    until word_is_correct?(letters)
+      puts "sorry, didn't catch that, try again:"
+      letters = gets.chomp
+    end
+    letters
   end
 end
