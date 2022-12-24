@@ -51,7 +51,13 @@ class WordlSolver
 
     def filter_greys
       @possible_words.reject! do |word|
-        @greys.any? { |letter| word.include?(letter) }
+        @greys.each do |letter|
+          if @greens.values.include?(letter)
+            word.count(letter) > 1
+          else
+            word.include?(letter)
+          end
+        end
       end
     end
   end
