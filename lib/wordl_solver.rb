@@ -18,7 +18,7 @@ class WordlSolver
       @greys = greys
       @greens = greens 
       @yellows = yellows
-      @possible_words = @possible_words.nil? || @possible_words.empty? ? LETTER_WORDS : @possible_words
+      @possible_words = @possible_words.nil? || @possible_words.empty? ? LETTER_WORDS.dup : @possible_words
       filter_greens
       filter_yellows
       filter_greys
@@ -41,23 +41,37 @@ class WordlSolver
       yellow_letters = @yellows.values.flatten.uniq
       @possible_words.select! do |word|
         possible = true
+        # Check that the word doesn't have yellow letters in the same position
         word.chars.each_with_index do |letter, index|
-          possible = false if @yellows[index].include?(letter)
+          if @yellows[index].include?(letter)
+            possible = false
+            break
+          end
         end
-        possible = false unless yellow_letters.all? { |letter| word.include?(letter) }
+        # Check that the word contains all yellow letters
+        if possible && !yellow_letters.empty?
+          yellow_letters.each do |letter|
+            unless word.include?(letter)
+              possible = false
+              break
+            end
+          end
+        end
         possible
       end
     end
 
     def filter_greys
       @possible_words.reject! do |word|
+        reject = false
         @greys.each do |letter|
           if @greens.values.include?(letter)
-            word.count(letter) > 1
+            reject = true if word.count(letter) > 1
           else
-            word.include?(letter)
+            reject = true if word.include?(letter)
           end
         end
+        reject
       end
     end
   end

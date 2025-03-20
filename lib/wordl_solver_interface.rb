@@ -44,7 +44,7 @@ class WordlSolverInterface
     else
       @greens[t] = letters[1]
     end
-    @greys.reject! { |letter| @greens.include?(letter) || @yellows.values.flatten.include?(letter) }
+    @greys.reject! { |letter| @greens.values.include?(letter) || @yellows.values.flatten.include?(letter) }
   end
 
   def ask_for_letters_and_colours
